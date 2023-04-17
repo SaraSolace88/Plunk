@@ -24,9 +24,9 @@ public class PlayerFire : MonoBehaviour
 
     private void Update()
     {
-        if(GetComponent<PlayerMovement>().direction != Vector3.zero)
+        if(GetComponentInParent<PlayerMovement>().direction != Vector3.zero)
         {
-            playerDirection = GetComponent<PlayerMovement>().direction;
+            playerDirection = GetComponentInParent<PlayerMovement>().direction;
         }
         if(!bFireOn)
         {
@@ -35,6 +35,7 @@ public class PlayerFire : MonoBehaviour
     }
     private void FireShot()
     {
+        GameManager.PlayOneShot(SoundType.Fire);
         GameObject g = Instantiate(projectile, transform.position, Quaternion.identity);
         g.GetComponent<Projectile>().direction = playerDirection;
     }

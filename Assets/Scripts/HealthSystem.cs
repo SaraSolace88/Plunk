@@ -39,7 +39,7 @@ public class HealthSystem : MonoBehaviour
         if (bPlayer)
             UpdateHealthBar(currentHealth / (maxHealth * 1f)); //Player
         else
-            healthBar.fillAmount = currentHealth / (maxHealth * 1f); //Enemies
+            //healthBar.fillAmount = currentHealth / (maxHealth * 1f); //Enemies
 
         if (currentHealth == 0 && bAlive)
         {
@@ -50,12 +50,14 @@ public class HealthSystem : MonoBehaviour
 
     private void MegaDeath()
     {
-        if(!bPlayer)
+        if (!bPlayer)
+        {
             UpdateScore(score);
+            Destroy(gameObject);
+        }
+
 
         if(deathSequence)
             deathSequence.Play();
     }
-
-
 }

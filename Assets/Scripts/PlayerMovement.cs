@@ -14,6 +14,10 @@ public class PlayerMovement : MonoBehaviour
     private float speed = 10;
     private Controls playerInput;
 
+    public static Vector3 playerPosition;
+    public static Vector3 previousPosition;
+    public Transform currentPosition;
+
     public float rotationSpeed;
 
 
@@ -28,8 +32,9 @@ public class PlayerMovement : MonoBehaviour
         playerInput.Disable();
     }
     
-    void Update()
+    void FixedUpdate()
     {
+        previousPosition = transform.position;
         direction.x = playerInput.Player.Movement.ReadValue<Vector2>().x;
         direction.y = 0;
         direction.z = playerInput.Player.Movement.ReadValue<Vector2>().y;
@@ -39,27 +44,6 @@ public class PlayerMovement : MonoBehaviour
             transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z)), Time.deltaTime * rotationSpeed);
 
         }
-    }
-
-    private void ConstrainMovement()
-    {
-        Vector3 currentPosition = transform.localPosition; //<Remember Local Position
-
-        //Upper constraint
-        if (currentPosition.y >= constraints.y)
-            currentPosition.y = constraints.y;
-        //Lower constraint
-        else if (currentPosition.y <= -constraints.y)
-            currentPosition.y = -constraints.y;
-        //Right constraint
-        else if (currentPosition.x >= constraints.x)
-            currentPosition.x = constraints.x;
-        //Left constraint
-        else if (currentPosition.x <= -constraints.x)
-            currentPosition.x = -constraints.x;
-
-        currentPosition.z = constraints.z;
-
-        transform.localPosition = currentPosition;
+        playerPosition = transform.position;
     }
 }
