@@ -8,6 +8,8 @@ public class HealthSystem : MonoBehaviour
 {
     [SerializeField]
     private bool bPlayer;
+    [SerializeField] 
+    private bool bBoss;
     [SerializeField]
     private int score;
     [SerializeField]
@@ -37,9 +39,7 @@ public class HealthSystem : MonoBehaviour
 
         //talk to healthbar
         if (bPlayer)
-            UpdateHealthBar(currentHealth / (maxHealth * 1f)); //Player
-        else
-            //healthBar.fillAmount = currentHealth / (maxHealth * 1f); //Enemies
+            UpdateHealthBar(currentHealth / (maxHealth * 1f)); //Player       
 
         if (currentHealth == 0 && bAlive)
         {
@@ -50,14 +50,20 @@ public class HealthSystem : MonoBehaviour
 
     private void MegaDeath()
     {
-        if (!bPlayer)
+        if (bPlayer)
+        {
+            Debug.Log("he dead");
+            deathSequence.Play();            
+        }
+        else if (bBoss)
+        {
+            UpdateScore(score);
+            Destroy(gameObject.transform.parent.gameObject);
+        }
+        else
         {
             UpdateScore(score);
             Destroy(gameObject);
         }
-
-
-        if(deathSequence)
-            deathSequence.Play();
     }
 }

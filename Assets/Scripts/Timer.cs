@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,6 +11,8 @@ public class Timer : MonoBehaviour
     public int minutes = 0;
     public int seconds = 0;
     private bool timerActive = false;
+
+    public static Action UpdateMinutes = delegate { };
 
     private void Update()
     {
@@ -27,6 +30,7 @@ public class Timer : MonoBehaviour
         if(seconds == 60)
         {
             minutes++;
+            UpdateMinutes();
             seconds = 0;
         }
         if (seconds < 10)

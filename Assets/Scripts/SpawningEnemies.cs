@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class SpawningEnemies : Timer
+public class SpawningEnemies : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerMovement pMovement;
     private bool isSpawning = false;
+    private int spawnBoss = 0;
 
     [SerializeField]
     private GameObject player;
@@ -15,15 +18,27 @@ public class SpawningEnemies : Timer
     private GameObject enemy2;
     [SerializeField]
     private GameObject enemy3;
+    [SerializeField]
+    private GameObject boss;
 
     private Vector3 spawnLocation;
     private Vector3 playerposition;
     private float enemyType;
+    private int minutes = 0;
 
-    
+    private void OnEnable()
+    {
+        Timer.UpdateMinutes += UpdateMinutes;
+    }
+
+    private void OnDisable()
+    {
+        Timer.UpdateMinutes -= UpdateMinutes;
+    }
 
     void Start()
     {
+        pMovement.enabled = true;
         spawnLocation.y = player.transform.position.y;
     }
 
@@ -36,10 +51,20 @@ public class SpawningEnemies : Timer
         }
     }
 
+    void UpdateMinutes()
+    {
+        //debug log checked- is working
+        minutes++;
+        if(minutes % 2 == 0)
+        {
+            spawnBoss = 1;
+        }
+    }
+
     IEnumerator SpawnEnemies()
     {
         isSpawning = true;
-        for (int i = 0; i < minutes + 1;  i++)
+        for (int i = 0; i < minutes + 1 * 2 + spawnBoss;  i++)
         {
             playerposition = player.transform.position;
 
@@ -54,7 +79,11 @@ public class SpawningEnemies : Timer
             } while (math.abs(spawnLocation.z) - 1.5 <= math.abs(playerposition.z) && math.abs(spawnLocation.z) + 1.5 >= math.abs(playerposition.z));
 
             enemyType = UnityEngine.Random.Range(0, 3);
-            if (enemyType < 1)
+            if (spawnBoss == 1)
+            {
+                Instantiate(boss, spawnLocation, Quaternion.identity);
+                spawnBoss = 0;
+            }else if (enemyType < 1)
             {
                 Instantiate(enemy1, spawnLocation, Quaternion.identity);
             }
@@ -67,7 +96,7 @@ public class SpawningEnemies : Timer
                 Instantiate(enemy3, spawnLocation, Quaternion.identity);
             }
         }
-        yield return new WaitForSeconds(UnityEngine.Random.Range(1,5));
+        yield return new WaitForSeconds(UnityEngine.Random.Range(0,5));
         isSpawning = false;
     }
 }

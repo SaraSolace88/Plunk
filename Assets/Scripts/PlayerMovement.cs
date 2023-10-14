@@ -7,6 +7,8 @@ using UnityEngine.Windows;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
+    private GameObject gun;
+    [SerializeField]
     private Vector3 constraints;
     //[SerializeField]
     public Vector3 direction;
@@ -20,6 +22,11 @@ public class PlayerMovement : MonoBehaviour
 
     public float rotationSpeed;
 
+    private void Awake()
+    {
+        gameObject.SetActive(true);
+        gun.SetActive(true);
+    }
 
     void Start()
     {
@@ -31,7 +38,6 @@ public class PlayerMovement : MonoBehaviour
     {
         playerInput.Disable();
     }
-    
     void FixedUpdate()
     {
         previousPosition = transform.position;

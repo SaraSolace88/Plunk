@@ -9,6 +9,7 @@ public class GameActionSequence : MonoBehaviour
 
     public void Play()
     {
+        Debug.Log("play");
         StartCoroutine(nameof(Sequence));
     }
 
